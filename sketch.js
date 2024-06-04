@@ -1,13 +1,16 @@
+/* MoveNet Skeleton - Steve's Makerspace (most of this code is from TensorFlow)
+
+MoveNet is developed by TensorFlow:
+https://www.tensorflow.org/hub/tutorials/movenet
+
+*/
+
 let video, bodypose, pose, keypoint, detector;
 let poses = [];
-let earOffset = 0;
-let wristOffset = 0;
-const earSpeed = 2; // 移動速度
-const wristSpeed = 2; // 移動速度
 
-function preload() {
-  carImg = loadImage("car.gif");
-}
+ function preload(){
+  carImg = loadImage("car.gif")
+ }
 
 async function init() {
   const detectorConfig = {
@@ -28,6 +31,7 @@ async function getPoses() {
   if (detector) {
     poses = await detector.estimatePoses(video.elt, {
       maxPoses: 2,
+      //flipHorizontal: true,
     });
   }
   requestAnimationFrame(getPoses);
@@ -57,47 +61,35 @@ function draw() {
 function drawSkeleton() {
   // Draw all the tracked landmark points
   for (let i = 0; i < poses.length; i++) {
-    pose = poses[i];
-    let leftEar = pose.keypoints[3];
-    let rightEar = pose.keypoints[4];
-    let leftWrist = pose.keypoints[9];
-    let rightWrist = pose.keypoints[10];
-
-    // 繪製左右耳朵上的 GIF 並從左向右移動
-    if (leftEar.score > 0.1) {
-      image(carImg, leftEar.x + earOffset, leftEar.y - 25, 50, 50);
-         push()
+      pose = poses[i];
+      partA = pose.keypoints[3];
+      partB = pose.keypoints[4];
+      partC = pose.keypoints[9]; // left wrist
+      partD = pose.keypoints[10]; // right wrist
+      //line(partA.x, partA.y, partB.x, partB.y);
+    if (partA.score > 0.1) {
+      image(carImg,partA.x,partA.y-25,50,50)
+     // image(carImg,partA.x+100,partA.y-25,50,50)
+      }
+    if (partB.score > 0.1) {
+     image(carImg,partB.x,partB.y-25,50,50)
+    if (partB.score > 0.1) {
+     push()
       textSize(40)
       scale(-1,1)
       text("41273045,林昱睿",partA.x-width,partA.y-100)
      pop()
-         
-    }
-    if (rightEar.score > 0.1) {
-      image(carImg, rightEar.x + earOffset, rightEar.y - 25, 50, 50);
+        if (partA.score > 0.1) {
+      image(carImg, partC.x, partC.y, 50, 50);
     }
 
-    // 更新耳朵的偏移量
-    earOffset += earSpeed;
-    if (earOffset > width) {
-      earOffset = -50; // 重置偏移量，讓 GIF 從左邊重新開始
+    // Draw the GIF at the right wrist if the score is higher than 0.1
+    if (partB.score > 0.1) {
+      image(carImg, partD.x, partD.y, 50, 50);
     }
-
-    // 繪製左右手腕上的 GIF 並從右向左移動
-    if (leftWrist.score > 0.1) {
-      image(carImg, leftWrist.x - wristOffset, leftWrist.y, 50, 50);
+        }
     }
-    if (rightWrist.score > 0.1) {
-      image(carImg, rightWrist.x - wristOffset, rightWrist.y, 50, 50);
     }
-
-    // 更新手腕的偏移量
-    wristOffset += wristSpeed;
-    if (wristOffset > width) {
-      wristOffset = -50; // 重置偏移量，讓 GIF 從右邊重新開始
-    }
-  }
-}
 
 /* Points (view on left of screen = left part - when mirrored)
   0 nose
@@ -113,7 +105,7 @@ function drawSkeleton() {
   10 right wrist
   11 left hip
   12 right hip
-  13 left knee
+  13 left kneee
   14 right knee
   15 left foot
   16 right foot
