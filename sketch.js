@@ -64,8 +64,8 @@ function drawSkeleton() {
       pose = poses[i];
       partA = pose.keypoints[3];
       partB = pose.keypoints[4];
-      partC = pose.keypoints[9]; // left wrist
-      partD = pose.keypoints[10]; // right wrist
+      partC = pose.keypoints[7];
+      partD = pose.keypoints[8];
       //line(partA.x, partA.y, partB.x, partB.y);
     if (partA.score > 0.1) {
       image(carImg,partA.x,partA.y-25,50,50)
@@ -77,7 +77,7 @@ function drawSkeleton() {
      push()
       textSize(40)
       scale(-1,1)
-      text("41273045,林昱睿",partA.x-width,partA.y-100)
+      text("41273045陳沛安",partA.x-width,partA.y-100)
      pop()
         if (partA.score > 0.1) {
       image(carImg, partC.x, partC.y, 50, 50);
