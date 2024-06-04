@@ -7,9 +7,11 @@ https://www.tensorflow.org/hub/tutorials/movenet
 
 let video, bodypose, pose, keypoint, detector;
 let poses = [];
+
  function preload(){
   carImg = loadImage("car.gif")
  }
+
 async function init() {
   const detectorConfig = {
     modelType: poseDetection.movenet.modelType.MULTIPOSE_LIGHTNING,
@@ -62,22 +64,32 @@ function drawSkeleton() {
       pose = poses[i];
       partA = pose.keypoints[3];
       partB = pose.keypoints[4];
+      partC = pose.keypoints[9]; // left wrist
+      partD = pose.keypoints[10]; // right wrist
       //line(partA.x, partA.y, partB.x, partB.y);
     if (partA.score > 0.1) {
       image(carImg,partA.x,partA.y-25,50,50)
      // image(carImg,partA.x+100,partA.y-25,50,50)
       }
     if (partB.score > 0.1) {
-    image(carImg,partB.x,partB.y-25,50,50)
-     if (partB.score>0.1)
-      push()
-     textSize(40)
-     scale(-1,1)
-     text("412730045林昱睿",partA.x-width,partA.y-100)
+     image(carImg,partB.x,partB.y-25,50,50)
+    if (partB.score > 0.1) {
+     push()
+      textSize(40)
+      scale(-1,1)
+      text("41273045,林昱睿",partA.x-width,partA.y-100)
+     pop()
+        if (partA.score > 0.1) {
+      image(carImg, partC.x, partC.y, 50, 50);
+    }
+
+    // Draw the GIF at the right wrist if the score is higher than 0.1
+    if (partB.score > 0.1) {
+      image(carImg, partD.x, partD.y, 50, 50);
+    }
         }
     }
-      }
-
+    }
 
 /* Points (view on left of screen = left part - when mirrored)
   0 nose
